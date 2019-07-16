@@ -4,9 +4,11 @@ var ingredients = {
     proteinsArray: ['Bacon', 'Beef', 'Chicken', 'Fish', 'Pork',  'Lamb',  'Shrimp', 'Turkey'],
     grainsArray: ['Almonds', 'Brown Rice', 'Oat', 'Pasta', 'Quinoa', 'Rice', 'Walnuts', 'Wheat'],
     fruitAndVegArray: ['Lemons', 'Limes', 'Apple', 'Tomato', 'Celery', 'Leek', 'Onion', 'Potato', 'Blueberries', 'Strawberries', 'Grapes', 'Banana', 'Cabbage', 'Lettuce', 'Mushrooms', 'Avocado', 'Carrots', 'Bell Peppers', 'Broccoli', 'Cucumber', 'Jalapeño', 'Garlic'],
-    dairyArray: ['Milk', 'Cheese', 'Yoghurt', 'Heavy Cream', 'Butter', 'Eggs'],
+    dairyArray: ['Milk', 'Cheese', 'Yogurt', 'Cream', 'Butter', 'Eggs'],
     condimentsArray: ['Mustard', 'Mayo', 'Ketchup', 'Olive Oil', 'Vinegar', 'Balsamic', 'Honey', 'Soy Sauce', 'Sesame Oil']
 }
+
+var selectedIngredients = [];
 
 var proteinClicked = 0;
 var dairyClicked = 0;
@@ -14,6 +16,8 @@ var grainClicked = 0;
 var condimentClicked = 0;
 var fruitVegClicked = 0;
 var ingredientFoodGroup;
+
+
 
 
 //Global function to be placed in each food group click event
@@ -31,16 +35,16 @@ function showArray(ingredientsList) {
         input.addClass("checkBox");
         input.attr("id", ingredientsList[i].replace(" ", "-"));
         input.attr("name", ingredientsList[i].replace(" ", "-"));
-        checkbox.append(input);
-
-
-
-
-        // SCOTT: This adds the text onto each Checkbox that is created.
+        //SEAN: checking to see if the ingredient is on the ingredients list, meaning it's already checked.
         var ingredientText = $("<span>");
         ingredientText.text(ingredientsList[i]); // SCOTT: Setting the text equal to each item in the ingredientsList variable. The ingredientsList variable now contains the contents of the precise ingredient array that we want (which we defined at the time that the showArray function was run)
 
-
+        if (selectedIngredients.indexOf(ingredientsList[i]) !== -1) {
+            console.log("hello");
+            input.prop('checked', true);
+            //need to check that the checkbox has already had it's state changed to "checked"
+        } 
+        checkbox.append(input);
         checkbox.append(ingredientText); // SCOTT: Appending the text onto the checkbox.
 
         // SCOTT: Getting things to display vertically! This inserts both a Line Break, and the entire Checkbox+Text object we created, onto the webpage.
@@ -60,17 +64,78 @@ function showArray(ingredientsList) {
 //SCOTT: Next, we need to create on-click events for each Checkbox that is created. Ideally, we need something that checks, IF this checkbox is checked, THEN we put the contents of that checkbox onto the "Your Selected Stuff" div. Then if the checkbox is UNchecked, we REMOVE that checkbox from the "Your Selected Stuff" div.
 
 // SCOTT: This should be a click sensor, and it should spit the text of its checkbox, into the SELECTED section of the webpage.
-// $(".checkBox").on("click", function() { 
-//     console.log("We clicked a checkbox!");
-// });
-
-// if $('#Milk').prop("checked") { 
-//     console.log("We clicked a checkbox!");
-// });
-
 
 
 // $('#Milk').prop("checked")
+// selected.prop("checked")
+
+
+$(document).on("click", ".checkBox", function() { 
+    var selectedText = $(this).attr("name");    
+    // SCOTT: If the checkbox is UNchecked at the time the user clicks it, then DO_THIS_STUFF
+    if ($(this).prop("checked") === true) {
+
+        // console.log("We clicked a checkbox!");
+        // console.log($(this).attr("name"));
+        // SEAN: Storing the ingredient (milk/ cheese etc) into a variable
+        
+
+        console.log($(this).attr("name"));
+
+        //SEAN: pushing it to the empty array
+        selectedIngredients.push(selectedText);
+        //SEAN: Console log to check
+        console.log(selectedIngredients);
+
+
+
+        selectedIngredientsRefresh();
+
+    } else {
+       console.log("box should be unchecked");
+
+       //stores the index position of the selected text into a variable
+       var indexOfIngredient = selectedIngredients.indexOf(selectedText);
+       
+            if (indexOfIngredient === 0) {
+                //uses pop because you're only getting rid of the first element
+                selectedIngredients.pop(selectedText);
+            } else {
+                console.log("index Of selected" + selectedText)
+                var backHalf = selectedIngredients.slice(indexOfIngredient + 1);
+
+                console.log("backhalf:" + backHalf);
+                console.log("selectedIng:" + selectedIngredients);
+                var frontHalf = selectedIngredients.slice(0, indexOfIngredient);
+                //SEAN: Merges the array
+                
+                console.log("backhalf:" + backHalf);
+                console.log("selectedIng:" + selectedIngredients);
+                selectedIngredients = frontHalf.concat(backHalf);
+            }
+
+        selectedIngredientsRefresh();
+    }
+});
+
+
+
+
+function selectedIngredientsRefresh() {
+    //SEAN: Clear the ingredients list first
+    $("#selectedIngredientsList").empty();
+    //SEAN: Display array in selectedIngredients div
+    $("#selectedIngredientsList").append("<ul>");
+    //SEAN: Need to display vertically - currently displaying horizontally
+    for (var j = 0; j < selectedIngredients.length; j++) {
+        $("#selectedIngredientsList").append("<li>" + selectedIngredients[j] + "</li>");
+    }
+};
+
+
+
+
+
 
 
 
