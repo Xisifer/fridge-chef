@@ -14,7 +14,7 @@ $(document).ready(function() {
 
     function recipeInfo() {
 
-        var queryURL = "https://www.food2fork.com/api/search?q=" + jsonArray + "&key=4ed288ed4b4af47c2487c9d1b2640147";
+        var queryURL = "https://www.food2fork.com/api/search?q=" + jsonArray + "&key=5cb31501fed0cde5ca4f43d7c223b03a";
 
         console.log(queryURL);
 
@@ -24,6 +24,7 @@ $(document).ready(function() {
         // KH's api key: 569763e780e654df8c9268b64763d32f
         // Danniel's api key: ed24f7b0cbe2cc006d00257869dbe9b7
         // Sean's api key: 4ed288ed4b4af47c2487c9d1b2640147 
+        // Lorena's api key: 5cb31501fed0cde5ca4f43d7c223b03a
 
         $.ajax({
             url: queryURL,
@@ -84,9 +85,7 @@ $(document).ready(function() {
                         // 1. card-content = materialize card format (MUST HAVE)   
                     cardContent = cardContent.attr("class", "card-content");
 
-                    cardContent = cardContent.text("# " + results.recipes[i].title)
-
-                    cardContent = cardContent.text(results.recipes[i].title);
+                    cardContent = cardContent.text("# " + results.recipes[i].title);
                     image = image.attr("name", results.recipes[i].title);
                     image = image.attr("onClick", "reply_click(this)");
                     
