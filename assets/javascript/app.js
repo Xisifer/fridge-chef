@@ -1,18 +1,24 @@
 //grabs the local storage info and stores it into a variable
-var recipeArray = localStorage.getItem("ingredients");
+// var recipeArray = localStorage.getItem("ingredients");
 //turns the local storage array into a string and lowercases it
-var jsonArray = JSON.stringify(recipeArray).toLowerCase();
+// var jsonArray = JSON.stringify(recipeArray).toLowerCase();
 // //replaces the commas with plus symbol to assist in the search
 // var correctedArray = jsonArray.replace(/,/g, ', ');
 // the above code that has been commented out isnt required as the documentation states that ingredients need to be separated by commas.
-console.log(jsonArray);
+// console.log(jsonArray);
+
+
 
 
 $(document).ready(function() {
 
+var localIngredients = localStorage.getItem("ingredients");
+var recipeArray = localIngredients.replace(/,/g, '+');
+console.log(recipeArray);
+
     function recipeInfo() {
 
-        var queryURL = "https://www.food2fork.com/api/search?q=" + jsonArray + "&key=f4516eb74b92e1200c2a1de2939ba5da";
+        var queryURL = "https://www.food2fork.com/api/search?q=" + recipeArray + "&key=41a415b9f58abaf64da0f2072369f676";
         console.log(queryURL);
 
         // my api key: 431843444431d180b6a297feea29edde
@@ -94,13 +100,41 @@ $(document).ready(function() {
                     var link = $("<div>");
                     // adds class and id to the title div
                         // 1. card-action = materialize card format (MUST HAVE)
-                    link = link.attr("class", "card-action");
+                        link = link.attr("class", "card-action");
 
                     // adds a clickable link
                     var linksrc = $("<a>Recipe Link</a>");
+
+                    var pickThisRecipe = $("<a>This is the recipe I want!</a>");
+                        pickThisRecipe = pickThisRecipe.attr("href", "");
+                        // pickThisRecipe = pickThisRecipe.attr("onclick", "saveData()");
+                        pickThisRecipe = pickThisRecipe.attr("class", "recipeGimme");
+                        pickThisRecipe = pickThisRecipe.attr("name", results.recipes[i].title);
+                    link.append(pickThisRecipe);
+
+                    console.log("pickThisRecipe=" + pickThisRecipe);
+                    console.log("Recipe Title: " + results.recipes[i].title)
+
+
+                    $(".recipeGimme").on("click", function() {
+                  
+                        // Take the Recipe Title and put it into LocalStorage
+                        localStorage.setItem("recipePicked", results.recipes[i].title);
+                        console.log("I WAS CLICKED!!");
+                    
+                    });
+
+
+
+                
                     
                     // link source from JSON format
                     linksrc = linksrc.attr("href", results.recipes[i].source_url);
+                    
+
+
+
+
 
                     
                 // Appends the image and the title to the image div
@@ -126,5 +160,8 @@ $(document).ready(function() {
     };
 
     recipeInfo();
+
+    
+
 
 })  

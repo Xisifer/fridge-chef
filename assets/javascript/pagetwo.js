@@ -17,6 +17,7 @@ var condimentClicked = 0;
 var fruitVegClicked = 0;
 var ingredientFoodGroup;
 
+localStorage.clear();
 
 
 //Global function to be placed in each food group click event
